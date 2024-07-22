@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useState, useEffect, useReducer } from "react";
 import Header from "./Header";
 import Loader from "./Loader";
 import Error from "./Error";
@@ -11,8 +11,9 @@ import NextButton from "./NextButton";
 import FinishScreen from "./FinishScreen";
 import Timer from "./Timer";
 import Footer from "./Footer";
+import Login from "./Login";
 
-const SECS_PER_QUESTION = 3000;
+const SECS_PER_QUESTION = 180;
 
 const initialState = {
   questions: [], //loading, error, ready, active finished
@@ -22,6 +23,8 @@ const initialState = {
   points: 0,
   highScore: 0,
   secondsRemaining: null,
+  users: [],
+  login: false,
 };
 
 function reducer(state, action) {
@@ -32,6 +35,17 @@ function reducer(state, action) {
         questions: action.payload,
         status: "ready",
       };
+    case "usersFetched":
+      return {
+        ...state,
+        users: action.payload,
+      };
+    case "loginSuccess":
+      return {
+        ...state,
+        login: true,
+      };
+
     case "start":
       return {
         ...state,
@@ -76,6 +90,15 @@ function reducer(state, action) {
       return {
         ...initialState,
         questions: state.questions,
+        login: true,
+        status: "ready",
+      };
+
+    case "logout":
+      return {
+        ...initialState,
+        questions: state.questions,
+        users: state.users,
         status: "ready",
       };
 
@@ -93,7 +116,17 @@ function reducer(state, action) {
 
 export default function App() {
   const [
-    { questions, status, index, answer, points, highScore, secondsRemaining },
+    {
+      questions,
+      status,
+      index,
+      answer,
+      points,
+      highScore,
+      secondsRemaining,
+      users,
+      login,
+    },
     dispatch,
   ] = useReducer(reducer, initialState);
   const maxPossiblePoints = questions.reduce(
@@ -103,58 +136,77 @@ export default function App() {
   const numOfQuestions = questions.length;
 
   useEffect(function () {
-    fetch("http://localhost:8000/questions")
+    fetch("http://localhost:5000/questions")
       .then((res) => res.json())
       .then((data) => dispatch({ type: "dataReceived", payload: data }))
       .catch((error) => dispatch({ type: "dataFailed" }));
   }, []);
+
+  useEffect(function () {
+    fetch("http://localhost:8000/users")
+      .then((res) => res.json())
+      .then((data) => dispatch({ type: "usersFetched", payload: data }))
+      .catch((error) => dispatch({ type: "dataFailed" }));
+  }, []);
+
   return (
     <div className="app">
-      <Header />
-      <Main>
-        {status === "loading" && <Loader />}
-        {status === "ready" && (
-          <StartScreen numOfQuestions={numOfQuestions} dispatch={dispatch} />
-        )}
-        {status === "error" && <Error />}
-        {status === "active" && (
-          <>
-            <Progress
-              index={index}
-              totalQsns={questions.length}
-              points={points}
-              maxPossiblePoints={maxPossiblePoints}
-              answer={answer}
-            />
-            <Question
-              question={questions[index]}
-              dispatch={dispatch}
-              answer={answer}
-              index={index}
-            />
-            <Footer>
-              <Timer dispatch={dispatch} secondsRemaining={secondsRemaining} />
-              <NextButton
-                dispatch={dispatch}
-                answer={answer}
-                index={index}
+      {!login && <Login dispatch={dispatch} users={users} />}
+      {login && (
+        <>
+          <Header />
+          <Main>
+            {status === "loading" && <Loader />}
+            {status === "ready" && (
+              <StartScreen
                 numOfQuestions={numOfQuestions}
+                dispatch={dispatch}
               />
-            </Footer>
-          </>
-        )}
+            )}
+            {status === "error" && <Error />}
+            {status === "active" && (
+              <>
+                <Progress
+                  index={index}
+                  totalQsns={questions.length}
+                  points={points}
+                  maxPossiblePoints={maxPossiblePoints}
+                  answer={answer}
+                />
+                <Question
+                  question={questions[index]}
+                  dispatch={dispatch}
+                  answer={answer}
+                  index={index}
+                />
+                <Footer>
+                  <Timer
+                    dispatch={dispatch}
+                    secondsRemaining={secondsRemaining}
+                  />
+                  <NextButton
+                    dispatch={dispatch}
+                    answer={answer}
+                    index={index}
+                    numOfQuestions={numOfQuestions}
+                  />
+                </Footer>
+              </>
+            )}
 
-        {status === "finished" && (
-          <>
-            <FinishScreen
-              points={points}
-              maxPossiblePoints={maxPossiblePoints}
-              highScore={highScore}
-              dispatch={dispatch}
-            />
-          </>
-        )}
-      </Main>
+            {status === "finished" && (
+              <>
+                <FinishScreen
+                  points={points}
+                  maxPossiblePoints={maxPossiblePoints}
+                  highScore={highScore}
+                  dispatch={dispatch}
+                />
+              </>
+            )}
+          </Main>
+        </>
+      )}
     </div>
   );
 }

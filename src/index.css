@@ -25,7 +25,11 @@ html {
 body {
   min-height: 100vh;
   color: var(--color-light);
-  background-color: var(--color-darkest);
+  /* background-color: var(--color-darkest); */
+  background-image: url("../public/background1.jpg");
+  background-position: top;
+  background-size: cover;
+
   padding: 3.2rem;
 }
 
@@ -37,11 +41,60 @@ body {
 }
 
 .main {
-  width: 50rem;
+  width: 80rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  height: 80vh;
+  width: 40vw;
+}
+
+form > .container {
+  padding: 40px 20px;
+  padding-top: 0px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  width: 55%;
+  height: 60%;
+  background-color: var(--color-light);
+
+  border-radius: 10px;
+}
+
+form h5 {
+  color: var(--color-darkest);
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+form .item {
+  width: 100%;
+}
+
+form input {
+  padding: 13px 15px;
+  border: solid var(--color-dark) 2px;
+  outline: none;
+  width: 100%;
+  border-radius: 5px;
+  font-size: 1.3rem;
+}
+
+form .container .btnLogin {
+  padding: 10px 30px;
+  margin-top: 2rem;
 }
 
 .app-header {
-  width: 66rem;
+  width: 75rem;
   margin-bottom: 4rem;
   display: flex;
   align-items: center;
@@ -58,11 +111,11 @@ body {
 }
 
 img {
-  width: 14rem;
+  width: 15rem;
 }
 
 h1 {
-  font-family: "Codystar";
+  font-family: monospace;
   font-size: 5.6rem;
 }
 
@@ -83,10 +136,20 @@ h4 {
   margin-bottom: 2.4rem;
 }
 
+h1,
+h2,
+h3,
+h4,
+p:not(.result) {
+  text-shadow: 2px 2px rgb(66, 66, 66);
+}
+
 .start {
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  text-align: center;
 }
 
 .progress {
@@ -96,7 +159,7 @@ h4 {
   gap: 1.2rem;
   grid-template-columns: auto auto;
   font-size: 1.8rem;
-  color: var(--color-medium);
+  color: var(--color-light);
 }
 
 progress {
@@ -107,29 +170,30 @@ progress {
 }
 
 ::-webkit-progress-bar {
-  background-color: var(--color-medium);
+  background-color: var(--color-light);
   border-radius: 100px;
 }
 ::-webkit-progress-value {
-  background-color: var(--color-theme);
+  background-color: var(--color-darkest);
   border-radius: 100px;
 }
 
 .btn {
   display: block;
   font-family: inherit;
-  color: inherit;
+  color: var(--color-darkest);
   font-size: 2rem;
   border: 2px solid var(--color-dark);
-  background-color: var(--color-dark);
+  background-color: var(--color-light);
   padding: 1.2rem 2.4rem;
   cursor: pointer;
-  border-radius: 100px;
+  border-radius: 5px;
   transition: 0.3s;
 }
 
 .btn:not([disabled]):hover {
   background-color: var(--color-darkest);
+  color: var(--color-light);
 }
 
 .btn-option:not([disabled]):hover {
@@ -157,14 +221,19 @@ progress {
 }
 
 .btn-option.correct {
-  background-color: var(--color-theme);
-  border: 2px solid var(--color-theme);
+  background-color: var(--color-darkest);
+  border: 2px solid var(--color-light);
   color: var(--color-light);
 }
 .btn-option.wrong {
-  background-color: var(--color-accent);
-  border: 2px solid var(--color-accent);
+  background-color: var(--color-light);
+  border: 2px solid var(--color-darkest);
   color: var(--color-darkest);
+}
+
+.restart-logout {
+  display: flex;
+  justify-content: space-around;
 }
 
 .answer {
@@ -172,8 +241,8 @@ progress {
 }
 
 .result {
-  background-color: var(--color-theme);
-  color: var(--color-light);
+  background-color: var(--color-light);
+  color: var(--color-darkest);
   border-radius: 100px;
   text-align: center;
   padding: 2rem 0;
@@ -207,10 +276,11 @@ progress {
 .timer {
   float: left;
   font-size: 1.8rem;
-  color: var(--color-medium);
+  color: var(--color-darkest);
   border: 2px solid var(--color-dark);
+  background-color: var(--color-light);
   padding: 1.35rem 2.8rem;
-  border-radius: 100px;
+  border-radius: 20px;
 }
 
 /* CREDIT: https://dev.to/afif/i-made-100-css-loaders-for-your-next-project-4eje */

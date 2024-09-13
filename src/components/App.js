@@ -16,34 +16,192 @@ import Login from "./Login";
 const SECS_PER_QUESTION = 180;
 
 const initialState = {
-  questions: [], //loading, error, ready, active finished
+  questions: [
+    {
+      question:
+        "What was significant about Italy's 2-1 win against Albania in Group B?",
+      options: [
+        "It was Italy's 50th victory in a EURO finals",
+        "Albania scored the fastest-ever EURO goal",
+        "There were more shots than any other game is EURO history",
+        "Italy scored the latest-ever EURO goal",
+      ],
+      correctOption: 1,
+      points: 10,
+    },
+    {
+      question:
+        "Georgia appeared at a major international tournament for the very first time. Who did their one and only victory at EURO 2024 come against?",
+      options: ["Czechia", "Turkey", "Spain", "Portugal"],
+      correctOption: 3,
+      points: 10,
+    },
+    {
+      question:
+        "Which goalkeeper saved all three penalties in a shoot-out during his team's round of 16 victory?",
+      options: [
+        "Mike Maignan (France)",
+        "Jordan Pickford (England)",
+        "Diogo Costa (Portugal)",
+        "Unai Simon (Spain)",
+      ],
+      correctOption: 2,
+      points: 10,
+    },
+    {
+      question:
+        "Whose winner after 89 minutes 59 seconds was the latest ever scored in the semi-finals of a EURO or World Cup (excluding extra time)?",
+      options: [
+        "Dani Olmo (Spain)",
+        "Ollie Watkina (England)",
+        "Lamine Yamal (Spain)",
+        "Harry Kane (England)",
+      ],
+      correctOption: 1,
+      points: 10,
+    },
+    {
+      question:
+        "Spain beat England 2-1 in the final in Berlin. Who scored the winning goal?",
+      options: [
+        "Lamine Yamal",
+        "Nico Williams",
+        "Mike Merino",
+        "Mikel Oyarzabal",
+      ],
+      correctOption: 3,
+      points: 10,
+    },
+    {
+      question:
+        "Spain's 15 goals at EURO 2024 is a new tournament record. Which team did they surpass? ",
+      options: ["Germany", "France", "England", "Portugal"],
+      correctOption: 1,
+      points: 10,
+    },
+    {
+      question:
+        "Which player attempted the most shots at EURO 2024 with a total of 24?",
+      options: [
+        "Cristiano Ronaldo",
+        "Kai Havertz",
+        "Kylian Mbappe",
+        "Memphis Depay",
+      ],
+      correctOption: 2,
+      points: 10,
+    },
+    {
+      question:
+        "Which side had the most overall average possession in the tournament with a total of 64.8%?",
+      options: ["Netherlands", "Italy", "England", "Portugal"],
+      correctOption: 3,
+      points: 10,
+    },
+    {
+      question: "A total of how many goals were scored at the tournament? ",
+      options: ["95", "117", "128", "133"],
+      correctOption: 1,
+      points: 10,
+    },
+    {
+      question: "Which country hosted the EURO 2024?",
+      options: ["Germany", "Belgium", "France", "Denmark"],
+      correctOption: 0,
+      points: 10,
+    },
+    {
+      question: "Who scored Euro 2024's first goal?",
+      options: [
+        "Kai Havertz",
+        "Jamal Musiala",
+        "Florian Wirtz",
+        "Niclas Fullkrug",
+      ],
+      correctOption: 2,
+      points: 10,
+    },
+    {
+      question:
+        "The Czech Republic v Turkey game set a new record for the most cards in a Euros match. How many cards (both yellow and red) were dished out?",
+      options: ["12", "15", "18", "21"],
+      correctOption: 2,
+      points: 10,
+    },
+    {
+      question: "Who holds the all-time Euro goals record?",
+      options: [
+        "Harry Kane",
+        "Cristiano Ronaldo",
+        "Nico Williams",
+        "Lamine Yamal",
+      ],
+      correctOption: 1,
+      points: 10,
+    },
+    {
+      question:
+        "Which player appeared in a record 6th Euro tournament at EURO 2024?",
+      options: [
+        "Cristiano Ronaldo",
+        "Toni Kroos",
+        "Luka Modric",
+        "Kylian Mbappe",
+      ],
+      correctOption: 0,
+      points: 10,
+    },
+    {
+      question: "How many time England won EURO title?",
+      options: ["1", "3", "0", "5"],
+      correctOption: 2,
+      points: 10,
+    },
+  ], //loading, error, ready, active finished
   status: "loading",
   index: 0,
   answer: null,
   points: 0,
   highScore: 0,
   secondsRemaining: null,
-  users: [],
+  users: [
+    {
+      username: "kin_65",
+      password: "it'sEuro@13",
+      id: 0,
+    },
+    {
+      username: "ak47",
+      password: "homie%^12",
+      id: 1,
+    },
+    {
+      username: "john12",
+      password: "john1234",
+      id: 2,
+    },
+  ],
   login: false,
 };
 
 function reducer(state, action) {
   switch (action.type) {
-    case "dataReceived":
-      return {
-        ...state,
-        questions: action.payload,
-        status: "ready",
-      };
-    case "usersFetched":
-      return {
-        ...state,
-        users: action.payload,
-      };
+    // case "dataReceived":
+    //   return {
+    //     ...state,
+    //     questions: action.payload,
+    //     status: "ready",
+    //   };
+    // case "usersFetched":
+    //   return {
+    //     ...state,
+    //     users: action.payload,
+    //   };
     case "loginSuccess":
       return {
         ...state,
         login: true,
+        status: "ready",
       };
 
     case "start":
@@ -135,7 +293,7 @@ export default function App() {
   );
   const numOfQuestions = questions.length;
 
-  useEffect(function () {
+  /* useEffect(function () {
     fetch("http://localhost:5000/questions")
       .then((res) => res.json())
       .then((data) => dispatch({ type: "dataReceived", payload: data }))
@@ -147,7 +305,7 @@ export default function App() {
       .then((res) => res.json())
       .then((data) => dispatch({ type: "usersFetched", payload: data }))
       .catch((error) => dispatch({ type: "dataFailed" }));
-  }, []);
+  }, []); */
 
   return (
     <div className="app">

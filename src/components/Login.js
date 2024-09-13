@@ -18,6 +18,7 @@ function Login({ dispatch, users }) {
   }
   return (
     <form>
+      <p>Use this for login:- Username: kin_65 Password: it'sEuro@13</p>
       <div className="container">
         <h5>Login</h5>
         <div className="item">
